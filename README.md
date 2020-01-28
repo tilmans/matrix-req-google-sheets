@@ -137,3 +137,5 @@ A configuration could be:
 Which would result in:
 
 ![More complex example](ComplexTable.png)
+
+For a live example see [this Google Sheet](https://docs.google.com/spreadsheets/d/1m57tpC69MJCQ40b8Vi4chK5am-lSNz_dDQ_IYKORTKM/edit?usp=sharing).

@@ -1,41 +1,29 @@
 function runGenerator() {
   var output = {
     columns: [
-      { title: "CR Description", inputCol: 4, processing: "Title"},
-      { title: "CR ID", inputCol: 4, processing: "id"},
-      { title: "SR ID", inputCol: 3, processing: "id"},
-      { title: "SR Description", inputCol: 3, processing: "Description"},
-      { title: "SRS ID", inputCol: 0, processing: "id"},
-      { title: "SRS Description", inputCol: 0, processing: "Description"},
+      { title: "REQ ID", inputCol: 3, processing: "id"},
+      { title: "RISK ID", inputCol: 4, processing: "id"},
+      { title: "SPEC ID", inputCol: 0, processing: "id"},
       { title: "TC ID", inputCol: 1, processing: "id"},
-      { title: "Verification Test Report (Manually Fill In)", inputCol: 1, processing: "blank"},
-//          { title: "Verification Status Pass / Fail", inputCol: 2, processing: "Test Run Result"},
-      { title: "Risk ID", inputCol: 5, processing: "id"},
-      { title: "Project Release Version", inputCol: 0, processing: "Target Release"},
-      { title: "Criticality", inputCol: 0, processing: 'Criticality'},
-      { title: "Folder", inputCol: 0, processing: "Folder"},
-      { title: "Priority", inputCol: 0, processing: "Priority"},
-      { title: "YouTrack#", inputCol: 0, processing: "YouTrack#"},
     ],
-    sortBy: ["CR","SR","SRS"],
+    sortBy: ["REQ","RISK","SPEC"],
     freeze: {
       rows: 1,
-      columns: 5,
+      columns: 0,
     }
   };
 
   var s = SpreadsheetApp.getActiveSpreadsheet();
 
-  var allData = MatrixReport.dumpAllData(["CR","SR","SRS","TC","XTC","RAT"]);
-  var flat = MatrixReport.followDownlinks(allData, "SRS");
-  flat = MatrixReport.addRows(flat, allData, "SRS", "SR");
-  flat = MatrixReport.addRows(flat, allData, "SR", "CR");
-  flat = MatrixReport.addRows(flat, allData, "SRS", "RAT");
+  var allData = dumpAllData(["XTC","TC","SPEC","RISK","REQ"]);
+  var flat = followDownlinks(allData, "SPEC");
+  flat = addRows(flat, allData, "SPEC", "REQ");
+  flat = addRows(flat, allData, "SPEC", "RISK");
 
-  var expanded = MatrixReport.expandData(allData, flat, output);
-  expanded.data = MatrixReport.removeDuplicates(expanded.data);
+  var expanded = expandData(allData, flat, output);
+  expanded.data = removeDuplicates(expanded.data);
 
-  var sheetName = "__DIVVM";
+  var sheetName = "__REPORT";
   var newSheet = s.getSheetByName(sheetName);
   if (newSheet) {
     newSheet.clear({formatOnly:false, contentsOnly:true});

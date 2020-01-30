@@ -60,7 +60,7 @@ Create a flat data structure based on the data set, starting at the provided cat
 
     var flat = followDownlinks(allData, "SPEC");
 
-Add additional data based on the uplinks. The first parameter is the start of the uplink, the second the target. Make sure you do this in order, here it first adds the links from SRS to SR, then from SR to CR.
+Add additional data based on the uplinks. The first parameter is the start of the uplink, the second the target. If you have a chain of uplinks then make sure you do this in order.
 
     flat = addRows(flat, allData, "SPEC", "REQ");
     flat = addRows(flat, allData, "SPEC", "RISK");

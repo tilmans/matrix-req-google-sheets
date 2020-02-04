@@ -1,4 +1,4 @@
-function dumpAllData(sheetNames) {
+function loadData(sheetNames) {
   var sheets = SpreadsheetApp.getActiveSpreadsheet().getSheets();
   var data = [];
   for (var it=0; it<sheets.length; it++) {
@@ -140,6 +140,19 @@ function addRows(flattened, allData, downlink, uplink) {
 }
 
 function expandData(allData, flattened, output) {
+  var columnLookup = {};
+  for (var it=0; it<flattened.length; it++) {
+    var row = flattened[it];
+    for (var cc=0; cc<row.length; cc++) {
+      var cat = row[cc].substring(0,row[cc].indexOf("-"));
+      columnLookup[cat] = cc;
+    }
+  }
+
+  function colLookup(name, row) {
+    return row[columnLookup[name]];
+  }
+
   var sortColumns = getSortColumns(output.sortBy, flattened);
   var sortOffset = output.columns.length + 1;
   var sortInfo = [];
@@ -158,18 +171,19 @@ function expandData(allData, flattened, output) {
     var newRow = [];
     for (var colIt=0; colIt<columns.length; colIt++) {
       var coldef = columns[colIt];
+      var cell = colLookup(coldef.inputCol, row);
       switch (coldef.processing) {
         case "id":
-          newRow.push(row[coldef.inputCol]);
+          newRow.push(cell);
           break;
         case 'numeric':
-          newRow.push(numericID(row[coldef.inputCol]));
+          newRow.push(numericID(cell));
           break;
         case 'blank':
           newRow.push("");
           break;
         default:
-          newRow.push(attribute(row[coldef.inputCol], coldef.processing, allData));
+          newRow.push(attribute(cell, coldef.processing, allData));
           break;
       }
     }
@@ -214,11 +228,7 @@ function getSortColumns(sortBy, flattened) {
   var columnNames = getSortHeaders(flattened);
   for (var it=0; it<sortBy.length; it++) {
     var name = sortBy[it];
-    for (var cc=0; cc<columnNames.length; cc++) {
-      if (columnNames[cc] === name) {
-        result.push({ title: "SORT_"+name, inputCol: cc, processing: "numeric"});
-      }
-    }
+    result.push({ title: "SORT_"+name, inputCol: name, processing: "numeric"});
   }
   return result;
 }

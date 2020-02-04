@@ -27,15 +27,14 @@ This is the entry point and can be run from the menu by selecting it in the drop
 
     function runGenerator() {
 
-The output configuration determines which columns will appear in the final spreadsheet. Each column is on a single line with a title, the number of the input column and the type of processing.
-The input column index is determined by the order of the input data. For example if you start at SPEC -> TC -> XTC and then add uplinks for REQ and RISK then the order will be SPEC, TC, XTC, REQ, RISK, starting at an index of 0.
+The output configuration determines which columns will appear in the final spreadsheet. Each column is on a single line with a title, the ID of the input column and the type of processing.
 
     var output = {
       columns: [
-        { title: "REQ ID", inputCol: 3, processing: "id"},
-        { title: "RISK ID", inputCol: 4, processing: "id"},
-        { title: "SPEC ID", inputCol: 0, processing: "id"},
-        { title: "TC ID", inputCol: 1, processing: "id"},
+        { title: "REQ ID", inputCol: "REQ", processing: "id"},
+        { title: "RISK ID", inputCol: "RISK", processing: "id"},
+        { title: "SPEC ID", inputCol: "SPEC", processing: "id"},
+        { title: "TC ID", inputCol: "TC", processing: "id"},
       ],
 
 Sort is applied on the final table in the order specified here using numerical sorting
@@ -54,7 +53,7 @@ Specifies which rows and columns to freeze for scrolling
 
 Read in the data from the existing tabs in the spreadsheet. This looks for tabs with these names
 
-    var allData = dumpAllData(["XTC","TC","SPEC","RISK","REQ"]);
+    var allData = loadData(["XTC","TC","SPEC","RISK","REQ"]);
 
 Create a flat data structure based on the data set, starting at the provided category and following the downlinks to the end
 

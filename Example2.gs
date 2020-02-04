@@ -1,15 +1,15 @@
 function runGenerator() {
   var output = {
     columns: [
-      { title: "REQ ID", inputCol: 3, processing: "id"},
-      { title: "REQ", inputCol: 3, processing: "Title"},
-      { title: "RISK ID", inputCol: 4, processing: "id"},
-      { title: "RISK", inputCol: 4, processing: "Title"},
-      { title: "SPEC ID", inputCol: 0, processing: "id"},
-      { title: "Description", inputCol: 0, processing: "Description"},
-      { title: "Folder", inputCol: 0, processing: "Folder"},
-      { title: "TC ID", inputCol: 1, processing: "id"},
-      { title: "TC Title", inputCol: 1, processing: "Title"},
+      { title: "REQ ID", inputCol: "REQ", processing: "id"},
+      { title: "REQ", inputCol: "REQ", processing: "Title"},
+      { title: "RISK ID", inputCol: "RISK", processing: "id"},
+      { title: "RISK", inputCol: "RISK", processing: "Title"},
+      { title: "SPEC ID", inputCol: "SPEC", processing: "id"},
+      { title: "Description", inputCol: "SPEC", processing: "Description"},
+      { title: "Folder", inputCol: "SPEC", processing: "Folder"},
+      { title: "TC ID", inputCol: "TC", processing: "id"},
+      { title: "TC Title", inputCol: "TC", processing: "Title"},
     ],
     sortBy: ["REQ","RISK","SPEC"],
     freeze: {
@@ -20,7 +20,7 @@ function runGenerator() {
 
   var s = SpreadsheetApp.getActiveSpreadsheet();
 
-  var allData = dumpAllData(["XTC","TC","SPEC","RISK","REQ"]);
+  var allData = loadData(["XTC","TC","SPEC","RISK","REQ"]);
   var flat = followDownlinks(allData, "SPEC");
   flat = addRows(flat, allData, "SPEC", "REQ");
   flat = addRows(flat, allData, "SPEC", "RISK");
